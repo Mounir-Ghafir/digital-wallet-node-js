@@ -1,0 +1,12 @@
+{
+  "name": "digital-wallet",
+  "version": "1.0.0",
+  "description": "Simple Digital Wallet Prototype",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "author": "FinTech Startup",
+  "license": "ISC"
+}
