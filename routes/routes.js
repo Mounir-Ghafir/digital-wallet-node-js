@@ -1,21 +1,10 @@
-// =====================
-//  router.js
-//  This file decides which function to call
-//  based on the URL and the HTTP method
-// =====================
-
 const userController   = require("../controllers/userController");
 const walletController = require("../controllers/walletController");
 
 function router(req, res) {
 
-  const method = req.method;   // GET, POST, PUT, DELETE
-  const url    = req.url;      // e.g. /users  or  /wallets/abc123
-
-
-  // ==============================
-  //  USER ROUTES
-  // ==============================
+  const method = req.method;  
+  const url    = req.url;      
 
   if (url === "/users" && method === "GET") {
     userController.getAllUsers(req, res);
@@ -36,10 +25,6 @@ function router(req, res) {
     userController.deleteUser(req, res, id);
 
 
-  // ==============================
-  //  WALLET ROUTES
-  // ==============================
-
   } else if (url === "/wallets" && method === "GET") {
     walletController.getAllWallets(req, res);
 
@@ -58,21 +43,13 @@ function router(req, res) {
     const id = url.split("/")[2];
     walletController.deleteWallet(req, res, id);
 
-
-  // POST /wallets/:id/deposit
   } else if (url.match(/^\/wallets\/[^/]+\/deposit$/) && method === "POST") {
     const id = url.split("/")[2];
     walletController.deposit(req, res, id);
 
-  // POST /wallets/:id/withdraw
   } else if (url.match(/^\/wallets\/[^/]+\/withdraw$/) && method === "POST") {
     const id = url.split("/")[2];
     walletController.withdraw(req, res, id);
-
-
-  // ==============================
-  //  NO MATCHING ROUTE
-  // ==============================
 
   } else {
     res.writeHead(404, { "Content-Type": "application/json" });

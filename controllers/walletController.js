@@ -1,41 +1,23 @@
-// =====================
-//  walletController.js
-//  CRUD functions for wallets
-//  A wallet belongs to a user
-// =====================
-
-// We need the users array to check if a user exists
 const usersController = require("./userController");
 
-// Our wallets "database" — just an array in memory
 let wallets = [];
 
 
-// ---------- Helper function ----------
 function sendResponse(res, statusCode, data) {
   res.writeHead(statusCode, { "Content-Type": "application/json" });
   res.end(JSON.stringify(data));
 }
 
-// ---------- Helper function ----------
 function generateId() {
   return Math.random().toString(36).slice(2, 9);
 }
 
 
-// =====================
-//  READ - Get all wallets
-//  GET /wallets
-// =====================
 function getAllWallets(req, res) {
   sendResponse(res, 200, wallets);
 }
 
 
-// =====================
-//  READ - Get one wallet by ID
-//  GET /wallets/:id
-// =====================
 function getOneWallet(req, res, id) {
   const wallet = wallets.find(function (w) {
     return w.id === id;
@@ -50,23 +32,16 @@ function getOneWallet(req, res, id) {
 }
 
 
-// =====================
-//  CREATE - Add a new wallet
-//  POST /wallets
-//  Body: { "user_id": "abc123", "name": "My Wallet", "sold": 100 }
-// =====================
 function createWallet(req, res) {
   const user_id = req.body.user_id;
   const name    = req.body.name;
   const sold    = req.body.sold;
 
-  // 1. Check that all fields are provided
   if (!user_id || !name || sold === undefined) {
     sendResponse(res, 400, { message: "Please provide user_id, name, and sold" });
     return;
   }
 
-  // 2. Check that the user_id actually exists in the users array
   const userExists = usersController.users.find(function (u) {
     return u.id === user_id;
   });
@@ -76,9 +51,8 @@ function createWallet(req, res) {
     return;
   }
 
-  // 3. Create the wallet
   const newWallet = {
-    id: generateId(),   // auto-generated ID
+    id: generateId(), 
     user_id: user_id,
     name: name,
     sold: sold
